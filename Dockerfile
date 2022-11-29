@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y git
 ENV PIP_USER=false
 
 # dependencies of admix-kit
-RUN pip install cmake numpy Cython
+RUN pip install cmake numpy Cython pyreadr
 
 # admix-kit
 RUN git clone https://github.com/KangchengHou/admix-kit && \
