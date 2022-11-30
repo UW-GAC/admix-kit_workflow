@@ -3,11 +3,37 @@ version 1.0
 workflow sim_admixed {
     input {
         Array[String] pops
-        Array[Float] admix_prop
+        #Array[Float] admix_prop
         String build
         Int chrom
         Int n_indiv
-        Int n_gen
+        #Int n_gen
+        File pgen
+        File psam
+        File pvar
+    }
+
+    scatter (p in pops) {
+        call subset_pop_indiv {
+            input: pgen = pgen,
+                   psam = psam,
+                   pvar = pvar,
+                   pop = p
+        }
+        call hapgen2 {
+            input: pgen = subset_pop_indiv.out_pgen,
+                   psam = subset_pop_indiv.out_psam,
+                   pvar = subset_pop_indiv.out_pvar,
+                   build = build,
+                   chrom = chrom,
+                   n_indiv = n_indiv
+        }
+    }
+
+    output {
+        Array[File] out_pgen = hapgen2.out_pgen
+        Array[File] out_psam = hapgen2.out_psam
+        Array[File] out_pvar = hapgen2.out_pvar
     }
     
     meta {

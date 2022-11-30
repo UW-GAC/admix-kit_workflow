@@ -1,5 +1,10 @@
 version: 1.2
 workflows:
+   - name: sim_admixed
+     subclass: WDL
+     primaryDescriptorPath: /sim_admixed.wdl
+     testParameterFiles:
+         - /sim_admixed.json
    - name: get_ref
      subclass: WDL
      primaryDescriptorPath: /get_ref.wdl

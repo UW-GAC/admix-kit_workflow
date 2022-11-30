@@ -1,0 +1,9 @@
+{
+    "sim_admixed:pops": ["PEL", "MXL"],
+    "sim_admixed.build": "hg38",
+    "sim_admixed.chrom": 22,
+    "sim_admixed.n_indiv": 10,
+    "sim_admixed.pgen": "myfile.pgen",
+    "sim_admixed.psam": "myfile.psam",
+    "sim_admixed.pvar": "myfile.pvar"
+}
