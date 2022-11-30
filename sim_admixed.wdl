@@ -134,6 +134,7 @@ task subset_pop_indiv {
 
     runtime {
         docker: "uwgac/admix-kit:0.1.0"
+        memory: "4GB"
     }
 }
 
@@ -170,6 +171,7 @@ task hapgen2 {
 
     runtime {
         docker: "uwgac/admix-kit:0.1.0"
+        memory: "4GB"
     }
 }
 
@@ -215,5 +217,6 @@ task admix_simu {
 
     runtime {
         docker: "uwgac/admix-kit:0.1.0"
+        memory: "16GB"
     }
 }
