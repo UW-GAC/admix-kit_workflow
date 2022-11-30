@@ -34,6 +34,8 @@ task get_1kg_ref {
 
     runtime {
         docker: "uwgac/admix-kit:0.1.0"
+        memory: "16GB"
+        disks: "local-disk 32 SSD"
     }
 }
 
