@@ -70,6 +70,8 @@ task subset_hapmap3 {
 
     runtime {
         docker: "uwgac/admix-kit:0.1.0"
+        memory: "16GB"
+        disks: "local-disk 32 SSD"
     }
 }
 
