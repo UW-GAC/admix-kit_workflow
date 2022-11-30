@@ -23,13 +23,13 @@ task get_1kg_ref {
     }
 
     command {
-        admix get-1kg-ref --dir ref --build ${build}
+        admix get-1kg-ref --dir 1kg-ref-${build} --build ${build}
     }
 
     output {
-        File out_pgen = "ref/pgen/all_chr.pgen"
-        File out_psam = "ref/pgen/all_chr.psam"
-        File out_pvar = "ref/pgen/all_chr.pvar"
+        File out_pgen = "1kg-ref-${build}/pgen/all_chr.pgen"
+        File out_psam = "1kg-ref-${build}/pgen/all_chr.psam"
+        File out_pvar = "1kg-ref-${build}/pgen/all_chr.pvar"
     }
 
     runtime {
