@@ -49,9 +49,12 @@ task subset_hapmap3 {
         Int chrom
     }
 
-    String pfile = sub(pgen, "\\.pgen$", "")
+    String pfile = basename(pgen, ".pgen")
 
     command {
+        ln -s ${pgen} ${pfile}.pgen
+        ln -s ${psam} ${pfile}.psam
+        ln -s ${pvar} ${pfile}.pvar
         admix subset-hapmap3 \
             --pfile ${pfile} \
             --build ${build} \
