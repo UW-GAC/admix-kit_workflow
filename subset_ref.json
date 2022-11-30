@@ -1,0 +1,7 @@
+{
+    "subset_ref.pgen": "myfile.pgen",
+    "subset_ref.psam": "myfile.psam",
+    "subset_ref.pvar": "myfile.pvar",
+    "subset_ref.build": "hg38",
+    "subset_ref.chrom": 22
+}

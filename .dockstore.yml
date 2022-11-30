@@ -3,6 +3,10 @@ workflows:
    - name: get_ref
      subclass: WDL
      primaryDescriptorPath: /get_ref.wdl
+     testParameterFiles:
+         - /get_ref.json
    - name: subset_ref
      subclass: WDL
      primaryDescriptorPath: /subset_ref.wdl
+     testParameterFiles:
+         - /subset_ref.json
