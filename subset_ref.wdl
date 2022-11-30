@@ -19,7 +19,7 @@ workflow subset_ref {
                 chrom = chrom
     }
 
-    output{
+    output {
         File out_pgen = subset_hapmap3.out_pgen
         File out_psam = subset_hapmap3.out_psam
         File out_pvar = subset_hapmap3.out_pvar

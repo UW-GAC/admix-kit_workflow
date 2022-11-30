@@ -11,7 +11,7 @@ workflow get_ref {
          input: build = build
     }
 
-    output{
+    output {
         File out_pgen = get_1kg_ref.out_pgen
         File out_psam = get_1kg_ref.out_psam
         File out_pvar = get_1kg_ref.out_pvar
