@@ -1,0 +1,8 @@
+{
+    "run_hapgen.pgen": "myfile.pgen",
+    "run_hapgen.psam": "myfile.psam",
+    "run_hapgen.pvar": "myfile.pvar",
+    "run_hapgen.build": "hg38",
+    "run_hapgen.chrom": 22,
+    "run_hapgen.n_indiv": 10
+}

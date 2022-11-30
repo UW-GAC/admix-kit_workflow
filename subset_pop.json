@@ -1,0 +1,6 @@
+{
+    "subset_pop.pgen": "myfile.pgen",
+    "subset_pop.psam": "myfile.psam",
+    "subset_pop.pvar": "myfile.pvar",
+    "subset_pop.pop": "YRI"
+}

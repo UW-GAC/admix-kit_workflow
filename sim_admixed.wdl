@@ -84,10 +84,12 @@ task subset_pop_indiv {
         String pop
     }
 
-    String pfile = sub(pgen, "\\.pgen$", "")
-    String prefix = basename(pgen, ".pgen")
+    String pfile = basename(pgen, ".pgen")
 
     command {
+        ln -s ${pgen} ${pfile}.pgen
+        ln -s ${psam} ${pfile}.psam
+        ln -s ${pvar} ${pfile}.pvar
         admix subset-pop-indiv \
             --pfile ${pfile} \
             --pop ${pop} \
@@ -95,13 +97,13 @@ task subset_pop_indiv {
         plink2 --pfile ${pfile} \
             --keep ${pop}.indiv \
             --make-pgen \
-            --out ${prefix}_${pop}
+            --out ${pfile}_${pop}
     }
 
     output {
-        File out_pgen = "${prefix}_${pop}.pgen"
-        File out_psam = "${prefix}_${pop}.psam"
-        File out_pvar = "${prefix}_${pop}.pvar"
+        File out_pgen = "${pfile}_${pop}.pgen"
+        File out_psam = "${pfile}_${pop}.psam"
+        File out_pvar = "${pfile}_${pop}.pvar"
     }
 
     runtime {
@@ -120,22 +122,24 @@ task hapgen2 {
         Int n_indiv
     }
 
-    String pfile = sub(pgen, "\\.pgen$", "")
-    String prefix = basename(pgen, ".pgen")
+    String pfile = basename(pgen, ".pgen")
 
     command {
+        ln -s ${pgen} ${pfile}.pgen
+        ln -s ${psam} ${pfile}.psam
+        ln -s ${pvar} ${pfile}.pvar
         admix hapgen2 \
             --pfile ${pfile} \
             --chrom ${chrom} \
             --n-indiv ${n_indiv} \
-            --out ${prefix}.hapgen2 \
+            --out ${pfile}_hapgen2 \
             --build ${build}
     }
 
     output {
-        File out_pgen = "${prefix}.hapgen2.pgen"
-        File out_psam = "${prefix}.hapgen2.psam"
-        File out_pvar = "${prefix}.hapgen2.pvar"
+        File out_pgen = "${pfile}_hapgen2.pgen"
+        File out_psam = "${pfile}_hapgen2.psam"
+        File out_pvar = "${pfile}_hapgen2.pvar"
     }
 
     runtime {

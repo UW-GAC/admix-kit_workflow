@@ -10,3 +10,13 @@ workflows:
      primaryDescriptorPath: /subset_ref.wdl
      testParameterFiles:
          - /subset_ref.json
+   - name: subset_pop
+     subclass: WDL
+     primaryDescriptorPath: /subset_pop.wdl
+     testParameterFiles:
+         - /subset_pop.json
+   - name: run_hapgen
+     subclass: WDL
+     primaryDescriptorPath: /run_hapgen.wdl
+     testParameterFiles:
+         - /run_hapgen.json
