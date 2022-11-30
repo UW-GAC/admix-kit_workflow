@@ -9,12 +9,15 @@ workflow sim_admixed {
         Int n_indiv
         Int n_gen
     }
-
     
+    meta {
+        author: "Stephanie Gogarten"
+        email: "sdmorris@uw.edu"
+    }
 }
 
 
-task get-1kg-ref {
+task get_1kg_ref {
     input {
         String build
     }
@@ -24,9 +27,9 @@ task get-1kg-ref {
     }
 
     output {
-        File pgen = "ref/pgen/all_chr.pgen"
-        File psam = "ref/pgen/all_chr.psam"
-        File pvar = "ref/pgen/all_chr.pvar"
+        File out_pgen = "ref/pgen/all_chr.pgen"
+        File out_psam = "ref/pgen/all_chr.psam"
+        File out_pvar = "ref/pgen/all_chr.pvar"
     }
 
     runtime {
@@ -35,7 +38,7 @@ task get-1kg-ref {
 }
 
 
-task subset-hapmap3 {
+task subset_hapmap3 {
     input {
         File pgen
         File psam
@@ -55,9 +58,9 @@ task subset-hapmap3 {
     }
 
     output {
-        File pgen = "hm3_chr${chrom}.pgen"
-        File psam = "hm3_chr${chrom}.psam"
-        File pvar = "hm3_chr${chrom}.pvar"
+        File out_pgen = "hm3_chr${chrom}.pgen"
+        File out_psam = "hm3_chr${chrom}.psam"
+        File out_pvar = "hm3_chr${chrom}.pvar"
     }
 
     runtime {
@@ -66,7 +69,7 @@ task subset-hapmap3 {
 }
 
 
-task subset-pop-indiv {
+task subset_pop_indiv {
     input {
         File pgen
         File psam
@@ -89,9 +92,9 @@ task subset-pop-indiv {
     }
 
     output {
-        File pgen = "${prefix}_${pop}.pgen"
-        File psam = "${prefix}_${pop}.psam"
-        File pvar = "${prefix}_${pop}.pvar"
+        File out_pgen = "${prefix}_${pop}.pgen"
+        File out_psam = "${prefix}_${pop}.psam"
+        File out_pvar = "${prefix}_${pop}.pvar"
     }
 
     runtime {
@@ -116,16 +119,16 @@ task hapgen2 {
     command {
         admix hapgen2 \
             --pfile ${pfile} \
-            --chrom ${CHROM} \
-            --n-indiv ${N_INDIV} \
+            --chrom ${chrom} \
+            --n-indiv ${n_indiv} \
             --out ${prefix}.hapgen2 \
-            --build ${BUILD}
+            --build ${build}
     }
 
     output {
-        File pgen = "${prefix}.hapgen2.pgen"
-        File psam = "${prefix}.hapgen2.psam"
-        File pvar = "${prefix}.hapgen2.pvar"
+        File out_pgen = "${prefix}.hapgen2.pgen"
+        File out_psam = "${prefix}.hapgen2.psam"
+        File out_pvar = "${prefix}.hapgen2.pvar"
     }
 
     runtime {
@@ -134,7 +137,7 @@ task hapgen2 {
 }
 
 
-task admix-simu {
+task admix_simu {
     input {
         Array[File] pgen
         Array[File] psam
@@ -145,12 +148,12 @@ task admix-simu {
         Int n_gen
     }
 
-    Array[String] pfile = sub(pgen, "\\.pgen$", "")
+    #Array[String] pfile = sub(pgen, "\\.pgen$", "")
 
     command {
         admix admix-simu \
-            --pfile-list "[${sep=',', pfile}]" \
-            --admix-prop "[${sep=',', admix_prop}]" \
+            --pfile-list [${sep=',' pgen}] \
+            --admix-prop [${sep=',' admix_prop}] \
             --n-indiv ${n_indiv} \
             --n-gen ${n_gen} \
             --build ${build} \
@@ -158,10 +161,10 @@ task admix-simu {
     }
 
     output {
-        File pgen = "admix.pgen"
-        File psam = "admix.psam"
-        File pvar = "admix.pvar"
-        File lanc = "admix.lanc"
+        File out_pgen = "admix.pgen"
+        File out_psam = "admix.psam"
+        File out_pvar = "admix.pvar"
+        File out_lanc = "admix.lanc"
     }
 
     runtime {
