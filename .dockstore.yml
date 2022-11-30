@@ -1,0 +1,8 @@
+version: 1.2
+workflows:
+   - name: get_ref
+     subclass: WDL
+     primaryDescriptorPath: /get_ref.wdl
+   - name: subset_ref
+     subclass: WDL
+     primaryDescriptorPath: /subset_ref.wdl
