@@ -159,11 +159,20 @@ task admix_simu {
         Int n_gen
     }
 
-    #Array[String] pfile = sub(pgen, "\\.pgen$", "")
-
     command {
+        pfile=()
+        for f in ${sep=' ' pgen}; do
+            pfile+="$(basename -s .pgen $f)"
+            basename "$f" | ln -s "$f"
+        done
+        for f in ${sep=' ' psam}; do
+            basename "$f" | ln -s "$f"
+        done
+        for f in ${sep=' ' pvar}; do
+            basename "$f" | ln -s "$f"
+        done
         admix admix-simu \
-            --pfile-list [${sep=',' pgen}] \
+            --pfile-list "$pfile" \
             --admix-prop [${sep=',' admix_prop}] \
             --n-indiv ${n_indiv} \
             --n-gen ${n_gen} \
