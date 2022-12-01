@@ -200,7 +200,7 @@ task admix_simu {
             basename "$f" | ln -s "$f"
         done
         admix admix-simu \
-            --pfile-list "$pfile" \
+            --pfile-list [$(IFS=, ; echo "${pfile[*]}")] \
             --admix-prop [${sep=',' admix_prop}] \
             --n-indiv ${n_indiv} \
             --n-gen ${n_gen} \
