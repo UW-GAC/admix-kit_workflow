@@ -48,14 +48,14 @@ task get_1kg_ref {
         String build
     }
 
-    command {
-        admix get-1kg-ref --dir 1kg-ref-${build} --build ${build}
-    }
+    command <<<
+        admix get-1kg-ref --dir 1kg-ref-~{build} --build ~{build}
+    >>>
 
     output {
-        File out_pgen = "1kg-ref-${build}/pgen/all_chr.pgen"
-        File out_psam = "1kg-ref-${build}/pgen/all_chr.psam"
-        File out_pvar = "1kg-ref-${build}/pgen/all_chr.pvar"
+        File out_pgen = "1kg-ref-~{build}/pgen/all_chr.pgen"
+        File out_psam = "1kg-ref-~{build}/pgen/all_chr.psam"
+        File out_pvar = "1kg-ref-~{build}/pgen/all_chr.pvar"
     }
 
     runtime {
@@ -77,21 +77,21 @@ task subset_hapmap3 {
 
     String pfile = basename(pgen, ".pgen")
 
-    command {
-        ln -s ${pgen} ${pfile}.pgen
-        ln -s ${psam} ${pfile}.psam
-        ln -s ${pvar} ${pfile}.pvar
+    command <<<
+        ln -s ~{pgen} ~{pfile}.pgen
+        ln -s ~{psam} ~{pfile}.psam
+        ln -s ~{pvar} ~{pfile}.pvar
         admix subset-hapmap3 \
-            --pfile ${pfile} \
-            --build ${build} \
-            --chrom ${chrom} \
-            --out_pfile hm3_chr${chrom}
-    }
+            --pfile ~{pfile} \
+            --build ~{build} \
+            --chrom ~{chrom} \
+            --out_pfile hm3_chr~{chrom}
+    >>>
 
     output {
-        File out_pgen = "hm3_chr${chrom}.pgen"
-        File out_psam = "hm3_chr${chrom}.psam"
-        File out_pvar = "hm3_chr${chrom}.pvar"
+        File out_pgen = "hm3_chr~{chrom}.pgen"
+        File out_psam = "hm3_chr~{chrom}.psam"
+        File out_pvar = "hm3_chr~{chrom}.pvar"
     }
 
     runtime {
@@ -112,24 +112,24 @@ task subset_pop_indiv {
 
     String pfile = basename(pgen, ".pgen")
 
-    command {
-        ln -s ${pgen} ${pfile}.pgen
-        ln -s ${psam} ${pfile}.psam
-        ln -s ${pvar} ${pfile}.pvar
+    command <<<
+        ln -s ~{pgen} ~{pfile}.pgen
+        ln -s ~{psam} ~{pfile}.psam
+        ln -s ~{pvar} ~{pfile}.pvar
         admix subset-pop-indiv \
-            --pfile ${pfile} \
-            --pop ${pop} \
-            --out ${pop}.indiv
-        plink2 --pfile ${pfile} \
-            --keep ${pop}.indiv \
+            --pfile ~{pfile} \
+            --pop ~{pop} \
+            --out ~{pop}.indiv
+        plink2 --pfile ~{pfile} \
+            --keep ~{pop}.indiv \
             --make-pgen \
-            --out ${pfile}_${pop}
-    }
+            --out ~{pfile}_~{pop}
+    >>>
 
     output {
-        File out_pgen = "${pfile}_${pop}.pgen"
-        File out_psam = "${pfile}_${pop}.psam"
-        File out_pvar = "${pfile}_${pop}.pvar"
+        File out_pgen = "~{pfile}_~{pop}.pgen"
+        File out_psam = "~{pfile}_~{pop}.psam"
+        File out_pvar = "~{pfile}_~{pop}.pvar"
     }
 
     runtime {
@@ -151,22 +151,22 @@ task hapgen2 {
 
     String pfile = basename(pgen, ".pgen")
 
-    command {
-        ln -s ${pgen} ${pfile}.pgen
-        ln -s ${psam} ${pfile}.psam
-        ln -s ${pvar} ${pfile}.pvar
+    command <<<
+        ln -s ~{pgen} ~{pfile}.pgen
+        ln -s ~{psam} ~{pfile}.psam
+        ln -s ~{pvar} ~{pfile}.pvar
         admix hapgen2 \
-            --pfile ${pfile} \
-            --chrom ${chrom} \
-            --n-indiv ${n_indiv} \
-            --out ${pfile}_hapgen2 \
-            --build ${build}
-    }
+            --pfile ~{pfile} \
+            --chrom ~{chrom} \
+            --n-indiv ~{n_indiv} \
+            --out ~{pfile}_hapgen2 \
+            --build ~{build}
+    >>>
 
     output {
-        File out_pgen = "${pfile}_hapgen2.pgen"
-        File out_psam = "${pfile}_hapgen2.psam"
-        File out_pvar = "${pfile}_hapgen2.pvar"
+        File out_pgen = "~{pfile}_hapgen2.pgen"
+        File out_psam = "~{pfile}_hapgen2.psam"
+        File out_pvar = "~{pfile}_hapgen2.pvar"
     }
 
     runtime {
