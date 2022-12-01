@@ -187,26 +187,26 @@ task admix_simu {
         Int n_gen
     }
 
-    command {
+    command <<<
         pfile=()
-        for f in ${sep=' ' pgen}; do
+        for f in ~{sep=' ' pgen}; do
             pfile+="$(basename -s .pgen $f)"
             basename "$f" | ln -s "$f"
         done
-        for f in ${sep=' ' psam}; do
+        for f in ~{sep=' ' psam}; do
             basename "$f" | ln -s "$f"
         done
-        for f in ${sep=' ' pvar}; do
+        for f in ~{sep=' ' pvar}; do
             basename "$f" | ln -s "$f"
         done
         admix admix-simu \
             --pfile-list [$(IFS=, ; echo "${pfile[*]}")] \
-            --admix-prop [${sep=',' admix_prop}] \
-            --n-indiv ${n_indiv} \
-            --n-gen ${n_gen} \
-            --build ${build} \
+            --admix-prop [~{sep=',' admix_prop}] \
+            --n-indiv ~{n_indiv} \
+            --n-gen ~{n_gen} \
+            --build ~{build} \
             --out admix
-    }
+    >>>
 
     output {
         File out_pgen = "admix.pgen"
