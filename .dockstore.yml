@@ -25,3 +25,8 @@ workflows:
      primaryDescriptorPath: /run_hapgen.wdl
      testParameterFiles:
          - /run_hapgen.json
+   - name: run_admix
+     subclass: WDL
+     primaryDescriptorPath: /run_admix.wdl
+     testParameterFiles:
+         - /run_admix.json
