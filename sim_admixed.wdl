@@ -3,11 +3,11 @@ version 1.0
 workflow sim_admixed {
     input {
         Array[String] pops
-        #Array[Float] admix_prop
+        Array[Float] admix_prop
         String build
         Int chrom
         Int n_indiv
-        #Int n_gen
+        Int n_gen
         File pgen
         File psam
         File pvar
@@ -30,10 +30,21 @@ workflow sim_admixed {
         }
     }
 
+    call admix_simu {
+        input: pgen = hapgen2.out_pgen,
+               psam = hapgen2.out_psam,
+               pvar = hapgen2.out_pvar,
+               admix_prop = admix_prop,
+               build = build,
+               n_indiv = n_indiv,
+               n_gen = n_gen
+    }
+
     output {
-        Array[File] out_pgen = hapgen2.out_pgen
-        Array[File] out_psam = hapgen2.out_psam
-        Array[File] out_pvar = hapgen2.out_pvar
+        File out_pgen = admix_simu.out_pgen
+        File out_psam = admix_simu.out_psam
+        File out_pvar = admix_simu.out_pvar
+        File out_lanc = admix_simu.out_lanc
     }
     
     meta {
