@@ -218,7 +218,7 @@ task admix_simu {
             --n-indiv ~{n_indiv} \
             --n-gen ~{n_gen} \
             --build ~{build} \
-            --out admix
+            --out admix_chr~{chrom}
     >>>
 
     output {
