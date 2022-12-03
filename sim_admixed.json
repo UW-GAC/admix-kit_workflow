@@ -4,8 +4,5 @@
     "sim_admixed.build": "hg38",
     "sim_admixed.chroms": [21, 22],
     "sim_admixed.n_indiv": 10,
-    "sim_admixed.n_gen": 2,
-    "sim_admixed.pgen": "myfile.pgen",
-    "sim_admixed.psam": "myfile.psam",
-    "sim_admixed.pvar": "myfile.pvar"
+    "sim_admixed.n_gen": 2
 }

@@ -8,16 +8,17 @@ workflow sim_admixed {
         Array[Int] chroms
         Int n_indiv
         Int n_gen
-        File pgen
-        File psam
-        File pvar
+    }
+
+    call get_1kg_ref {
+         input: build = build
     }
 
     scatter(c in chroms) {
         call subset_hapmap3 {
-            input: pgen = pgen,
-                   psam = psam,
-                   pvar = pvar,
+            input: pgen = get_1kg_ref.out_pgen,
+                   psam = get_1kg_ref.out_psam,
+                   pvar = get_1kg_ref.out_pvar,
                    build = build,
                    chrom = c
         }
@@ -45,6 +46,7 @@ workflow sim_admixed {
                    pvar = hapgen2.out_pvar,
                    admix_prop = admix_prop,
                    build = build,
+                   chrom = c,
                    n_indiv = n_indiv,
                    n_gen = n_gen
         }
@@ -204,6 +206,7 @@ task admix_simu {
         Array[File] pvar
         Array[Float] admix_prop
         String build
+        Int chrom
         Int n_indiv
         Int n_gen
     }
@@ -219,10 +222,10 @@ task admix_simu {
     >>>
 
     output {
-        File out_pgen = "admix.pgen"
-        File out_psam = "admix.psam"
-        File out_pvar = "admix.pvar"
-        File out_lanc = "admix.lanc"
+        File out_pgen = "admix_chr~{chrom}.pgen"
+        File out_psam = "admix_chr~{chrom}.psam"
+        File out_pvar = "admix_chr~{chrom}.pvar"
+        File out_lanc = "admix_chr~{chrom}.lanc"
     }
 
     runtime {

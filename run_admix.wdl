@@ -9,6 +9,7 @@ workflow run_admix {
         Array[File] pvar
         Array[Float] admix_prop
         String build
+        Int chrom
         Int n_indiv
         Int n_gen
     }
@@ -19,6 +20,7 @@ workflow run_admix {
                 pvar = pvar,
                 admix_prop = admix_prop,
                 build = build,
+                chrom = chrom,
                 n_indiv = n_indiv,
                 n_gen = n_gen
     }
