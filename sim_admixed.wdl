@@ -5,7 +5,7 @@ workflow sim_admixed {
         Array[String] pops
         Array[Float] admix_prop
         String build
-        Int chrom
+        Array[Int] chroms
         Int n_indiv
         Int n_gen
         File pgen
@@ -13,38 +13,48 @@ workflow sim_admixed {
         File pvar
     }
 
-    scatter (p in pops) {
-        call subset_pop_indiv {
+    scatter(c in chroms) {
+        call subset_hapmap3 {
             input: pgen = pgen,
                    psam = psam,
                    pvar = pvar,
-                   pop = p
-        }
-        call hapgen2 {
-            input: pgen = subset_pop_indiv.out_pgen,
-                   psam = subset_pop_indiv.out_psam,
-                   pvar = subset_pop_indiv.out_pvar,
                    build = build,
-                   chrom = chrom,
-                   n_indiv = n_indiv
+                   chrom = c
         }
-    }
 
-    call admix_simu {
-        input: pgen = hapgen2.out_pgen,
-               psam = hapgen2.out_psam,
-               pvar = hapgen2.out_pvar,
-               admix_prop = admix_prop,
-               build = build,
-               n_indiv = n_indiv,
-               n_gen = n_gen
+        scatter (p in pops) {
+            call subset_pop_indiv {
+                input: pgen = subset_hapmap3.out_pgen,
+                       psam = subset_hapmap3.out_psam,
+                       pvar = subset_hapmap3.out_pvar,
+                       pop = p
+            }
+            call hapgen2 {
+                input: pgen = subset_pop_indiv.out_pgen,
+                       psam = subset_pop_indiv.out_psam,
+                       pvar = subset_pop_indiv.out_pvar,
+                       build = build,
+                       chrom = c,
+                       n_indiv = n_indiv
+            }
+        }
+
+        call admix_simu {
+            input: pgen = hapgen2.out_pgen,
+                   psam = hapgen2.out_psam,
+                   pvar = hapgen2.out_pvar,
+                   admix_prop = admix_prop,
+                   build = build,
+                   n_indiv = n_indiv,
+                   n_gen = n_gen
+        }
     }
 
     output {
-        File out_pgen = admix_simu.out_pgen
-        File out_psam = admix_simu.out_psam
-        File out_pvar = admix_simu.out_pvar
-        File out_lanc = admix_simu.out_lanc
+        Array[File] out_pgen = admix_simu.out_pgen
+        Array[File] out_psam = admix_simu.out_psam
+        Array[File] out_pvar = admix_simu.out_pvar
+        Array[File] out_lanc = admix_simu.out_lanc
     }
     
     meta {

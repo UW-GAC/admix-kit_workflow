@@ -2,7 +2,7 @@
     "sim_admixed:pops": ["PEL", "MXL"],
     "sim_admixed:admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
-    "sim_admixed.chrom": 22,
+    "sim_admixed.chroms": [21, 22],
     "sim_admixed.n_indiv": 10,
     "sim_admixed.n_gen": 2,
     "sim_admixed.pgen": "myfile.pgen",
