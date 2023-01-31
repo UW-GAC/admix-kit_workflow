@@ -82,7 +82,7 @@ task get_1kg_ref {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.0"
+        docker: "uwgac/admix-kit:0.1.1"
         memory: "16GB"
         disks: "local-disk 32 SSD"
     }
@@ -118,7 +118,7 @@ task subset_hapmap3 {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.0"
+        docker: "uwgac/admix-kit:0.1.1"
         memory: "32GB"
         disks: "local-disk 32 SSD"
     }
@@ -156,7 +156,7 @@ task subset_pop_indiv {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.0"
+        docker: "uwgac/admix-kit:0.1.1"
         memory: "4GB"
     }
 }
@@ -193,7 +193,7 @@ task hapgen2 {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.0"
+        docker: "uwgac/admix-kit:0.1.1"
         memory: "4GB"
     }
 }
@@ -229,7 +229,7 @@ task admix_simu {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.0"
+        docker: "uwgac/admix-kit:0.1.1"
         memory: "16GB"
     }
 }

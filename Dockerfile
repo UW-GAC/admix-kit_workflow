@@ -10,7 +10,7 @@ ENV PIP_USER=false
 RUN pip install cmake numpy Cython pyreadr
 
 # admix-kit
-RUN git clone https://github.com/KangchengHou/admix-kit && \
+RUN git clone https://github.com/KangchengHou/admix-kit --branch v0.1.1 && \
     cd admix-kit && pip install -e . && cd $HOME
 
 # PLINK2
