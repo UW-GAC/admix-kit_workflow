@@ -1,34 +1,60 @@
 version 1.0
 
-import "sim_admixed.wdl" as tasks
+#import "sim_admixed.wdl" as tasks
 
 workflow run_hapgen {
     input {
-        File pgen
-        File psam
-        File pvar
+        Map[String, File] pgen
         String build
-        Int chrom
         Int n_indiv
     }
 
-    call tasks.hapgen2 {
+    call hapgen2 {
          input: pgen = pgen,
-                psam = psam,
-                pvar = pvar,
                 build = build,
-                chrom = chrom,
                 n_indiv = n_indiv
     }
 
     output {
-        File out_pgen = hapgen2.out_pgen
-        File out_psam = hapgen2.out_psam
-        File out_pvar = hapgen2.out_pvar
+        Map[String, File] out_pgen = hapgen2.out_pgen
     }
 
     meta {
         author: "Stephanie Gogarten"
         email: "sdmorris@uw.edu"
+    }
+}
+
+task hapgen2 {
+    input {
+        Map[String, File] pgen
+        String build
+        Int n_indiv
+    }
+
+    String pfile = basename(pgen["pgen"], ".pgen")
+
+    command <<<
+        ln -s ~{pgen["pgen"]} ~{pfile}.pgen
+        ln -s ~{pgen["psam"]} ~{pfile}.psam
+        ln -s ~{pgen["pvar"]} ~{pfile}.pvar
+        admix hapgen2 \
+            --pfile ~{pfile} \
+            --n-indiv ~{n_indiv} \
+            --out ~{pfile}_hapgen2 \
+            --build ~{build}
+    >>>
+
+    output {
+        Map[String, File] out_pgen = {
+            "pgen": "~{pfile}_hapgen2.pgen", 
+            "psam": "~{pfile}_hapgen2.psam", 
+            "pvar": "~{pfile}_hapgen2.pvar"
+        }
+    }
+
+    runtime {
+        docker: "uwgac/admix-kit:0.1.2"
+        memory: "4GB"
     }
 }
