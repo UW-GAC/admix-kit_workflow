@@ -12,9 +12,7 @@ workflow sim_admixed {
     scatter(chrom in pgen) {
         scatter (pop in chrom) {
             call hapgen2 {
-                input: pgen = pop["pgen"],
-                       psam = pop["psam"],
-                       pvar = pop["pvar"],
+                input: pgen = pop,
                        build = build,
                        n_indiv = n_indiv
             }
@@ -32,9 +30,7 @@ workflow sim_admixed {
     }
 
     output {
-        Array[File] out_pgen = admix_simu.out_pgen
-        Array[File] out_psam = admix_simu.out_psam
-        Array[File] out_pvar = admix_simu.out_pvar
+        Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
     }
     
@@ -47,19 +43,17 @@ workflow sim_admixed {
 
 task hapgen2 {
     input {
-        File pgen
-        File psam
-        File pvar
+        Map[String, File] pgen
         String build
         Int n_indiv
     }
 
-    String pfile = basename(pgen, ".pgen")
+    String pfile = basename(pgen["pgen"], ".pgen")
 
     command <<<
-        ln -s ~{pgen} ~{pfile}.pgen
-        ln -s ~{psam} ~{pfile}.psam
-        ln -s ~{pvar} ~{pfile}.pvar
+        ln -s ~{pgen["pgen"]} ~{pfile}.pgen
+        ln -s ~{pgen["psam"]} ~{pfile}.psam
+        ln -s ~{pgen["pvar"]} ~{pfile}.pvar
         admix hapgen2 \
             --pfile ~{pfile} \
             --n-indiv ~{n_indiv} \
@@ -102,9 +96,11 @@ task admix_simu {
     >>>
 
     output {
-        File out_pgen = "admix.pgen"
-        File out_psam = "admix.psam"
-        File out_pvar = "admix.pvar"
+        Map[String, File] out_pgen = {
+            "pgen": "admix.pgen", 
+            "psam": "admix.psam", 
+            "pvar": "admix.pvar"
+        }
         File out_lanc = "admix.lanc"
     }
 

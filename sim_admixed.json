@@ -1,31 +1,31 @@
 {
-    "sim_admixed:pgen": [
+    "sim_admixed.pgen": [
         [
             {
-                "pgen": "PEL_chr21.pgen",
-                "psam": "PEL_chr21.psam",
-                "pvar": "PEL_chr21.pvar"
+                "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pgen",
+                "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.psam",
+                "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pvar"
             },
             {
-                "pgen": "MXL_chr21.pgen",
-                "psam": "MXL_chr21.psam",
-                "pvar": "MXL_chr21.pvar"
+                "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pgen",
+                "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.psam",
+                "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pvar"
             }
         ],
         [
             {
-                "pgen": "PEL_chr22.pgen",
-                "psam": "PEL_chr22.psam",
-                "pvar": "PEL_chr22.pvar"
+                "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pgen",
+                "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.psam",
+                "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pvar"
             },
             {
-                "pgen": "MXL_chr22.pgen",
-                "psam": "MXL_chr22.psam",
-                "pvar": "MXL_chr22.pvar"
+                "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pgen",
+                "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.psam",
+                "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pvar"
             }
         ]
     ],
-    "sim_admixed:admix_prop": [0.4, 0.6],
+    "sim_admixed.admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
     "sim_admixed.n_indiv": 10,
     "sim_admixed.n_gen": 2

@@ -1,7 +1,7 @@
 {
-    "run_admix.pgen": "myfile.pgen",
-    "run_admix.psam": "myfile.psam",
-    "run_admix.pvar": "myfile.pvar",
+    "run_admix.pgen": ["PEL.22_hapgen2.pgen", "MXL.22_hapgen2.pgen"],
+    "run_admix.psam": ["PEL.22_hapgen2.psam", "MXL.22_hapgen2.psam"],
+    "run_admix.pvar": ["PEL.22_hapgen2.pvar", "MXL.22_hapgen2.pvar"],
     "run_admix.admix_prop": [0.4, 0.6],
     "run_admix.build": "hg38",
     "run_admix.chrom": 22,
