@@ -51,7 +51,6 @@ task hapgen2 {
         File psam
         File pvar
         String build
-        Int? chrom
         Int n_indiv
     }
 
@@ -62,7 +61,7 @@ task hapgen2 {
         ln -s ~{psam} ~{pfile}.psam
         ln -s ~{pvar} ~{pfile}.pvar
         admix hapgen2 \
-            --pfile ~{pfile} ${if defined(chrom) then "--chrom ${chrom}" else ""} \
+            --pfile ~{pfile} \
             --n-indiv ~{n_indiv} \
             --out ~{pfile}_hapgen2 \
             --build ~{build}
