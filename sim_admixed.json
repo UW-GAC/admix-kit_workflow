@@ -1,8 +1,32 @@
 {
-    "sim_admixed:pops": ["PEL", "MXL"],
+    "sim_admixed:pgen": [
+        [
+            {
+                "pgen": "PEL_chr21.pgen",
+                "psam": "PEL_chr21.psam",
+                "pvar": "PEL_chr21.pvar"
+            },
+            {
+                "pgen": "MXL_chr21.pgen",
+                "psam": "MXL_chr21.psam",
+                "pvar": "MXL_chr21.pvar"
+            }
+        ],
+        [
+            {
+                "pgen": "PEL_chr22.pgen",
+                "psam": "PEL_chr22.psam",
+                "pvar": "PEL_chr22.pvar"
+            },
+            {
+                "pgen": "MXL_chr22.pgen",
+                "psam": "MXL_chr22.psam",
+                "pvar": "MXL_chr22.pvar"
+            }
+        ]
+    ],
     "sim_admixed:admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
-    "sim_admixed.chroms": [21, 22],
     "sim_admixed.n_indiv": 10,
     "sim_admixed.n_gen": 2
 }
