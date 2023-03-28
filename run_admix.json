@@ -4,7 +4,6 @@
     "run_admix.pvar": ["PEL.22_hapgen2.pvar", "MXL.22_hapgen2.pvar"],
     "run_admix.admix_prop": [0.4, 0.6],
     "run_admix.build": "hg38",
-    "run_admix.chrom": 22,
     "run_admix.n_indiv": 10,
     "run_admix.n_gen": 2
 }
