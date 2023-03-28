@@ -4,20 +4,14 @@ import "sim_admixed.wdl" as tasks
 
 workflow run_hapgen {
     input {
-        File pgen
-        File psam
-        File pvar
+        Map[String, File] pgen
         String build
-        Int chrom
         Int n_indiv
     }
 
     call tasks.hapgen2 {
          input: pgen = pgen,
-                psam = psam,
-                pvar = pvar,
                 build = build,
-                chrom = chrom,
                 n_indiv = n_indiv
     }
 

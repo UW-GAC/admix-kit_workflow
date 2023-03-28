@@ -2,40 +2,18 @@ version 1.0
 
 workflow sim_admixed {
     input {
-        Array[String] pops
+        Array[Array[Map[String, File]]] pgen
         Array[Float] admix_prop
         String build
-        Array[Int] chroms
         Int n_indiv
         Int n_gen
     }
 
-    call get_1kg_ref {
-         input: build = build
-    }
-
-    scatter(c in chroms) {
-        call subset_hapmap3 {
-            input: pgen = get_1kg_ref.out_pgen,
-                   psam = get_1kg_ref.out_psam,
-                   pvar = get_1kg_ref.out_pvar,
-                   build = build,
-                   chrom = c
-        }
-
-        scatter (p in pops) {
-            call subset_pop_indiv {
-                input: pgen = subset_hapmap3.out_pgen,
-                       psam = subset_hapmap3.out_psam,
-                       pvar = subset_hapmap3.out_pvar,
-                       pop = p
-            }
+    scatter(chrom in pgen) {
+        scatter (pop in chrom) {
             call hapgen2 {
-                input: pgen = subset_pop_indiv.out_pgen,
-                       psam = subset_pop_indiv.out_psam,
-                       pvar = subset_pop_indiv.out_pvar,
+                input: pgen = pop,
                        build = build,
-                       chrom = c,
                        n_indiv = n_indiv
             }
         }
@@ -46,16 +24,13 @@ workflow sim_admixed {
                    pvar = hapgen2.out_pvar,
                    admix_prop = admix_prop,
                    build = build,
-                   chrom = c,
                    n_indiv = n_indiv,
                    n_gen = n_gen
         }
     }
 
     output {
-        Array[File] out_pgen = admix_simu.out_pgen
-        Array[File] out_psam = admix_simu.out_psam
-        Array[File] out_pvar = admix_simu.out_pvar
+        Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
     }
     
@@ -66,121 +41,21 @@ workflow sim_admixed {
 }
 
 
-task get_1kg_ref {
-    input {
-        String build
-    }
-
-    command <<<
-        admix get-1kg-ref --dir 1kg-ref-~{build} --build ~{build}
-    >>>
-
-    output {
-        File out_pgen = "1kg-ref-~{build}/pgen/all_chr.pgen"
-        File out_psam = "1kg-ref-~{build}/pgen/all_chr.psam"
-        File out_pvar = "1kg-ref-~{build}/pgen/all_chr.pvar"
-    }
-
-    runtime {
-        docker: "uwgac/admix-kit:0.1.1"
-        memory: "16GB"
-        disks: "local-disk 32 SSD"
-    }
-}
-
-
-task subset_hapmap3 {
-    input {
-        File pgen
-        File psam
-        File pvar
-        String build
-        Int chrom
-    }
-
-    String pfile = basename(pgen, ".pgen")
-
-    command <<<
-        ln -s ~{pgen} ~{pfile}.pgen
-        ln -s ~{psam} ~{pfile}.psam
-        ln -s ~{pvar} ~{pfile}.pvar
-        admix subset-hapmap3 \
-            --pfile ~{pfile} \
-            --build ~{build} \
-            --chrom ~{chrom} \
-            --out_pfile hm3_chr~{chrom}
-    >>>
-
-    output {
-        File out_pgen = "hm3_chr~{chrom}.pgen"
-        File out_psam = "hm3_chr~{chrom}.psam"
-        File out_pvar = "hm3_chr~{chrom}.pvar"
-    }
-
-    runtime {
-        docker: "uwgac/admix-kit:0.1.1"
-        memory: "32GB"
-        disks: "local-disk 32 SSD"
-    }
-}
-
-
-task subset_pop_indiv {
-    input {
-        File pgen
-        File psam
-        File pvar
-        String pop
-    }
-
-    String pfile = basename(pgen, ".pgen")
-
-    command <<<
-        ln -s ~{pgen} ~{pfile}.pgen
-        ln -s ~{psam} ~{pfile}.psam
-        ln -s ~{pvar} ~{pfile}.pvar
-        admix subset-pop-indiv \
-            --pfile ~{pfile} \
-            --pop ~{pop} \
-            --out ~{pop}.indiv
-        plink2 --pfile ~{pfile} \
-            --keep ~{pop}.indiv \
-            --make-pgen \
-            --out ~{pfile}_~{pop}
-    >>>
-
-    output {
-        File out_pgen = "~{pfile}_~{pop}.pgen"
-        File out_psam = "~{pfile}_~{pop}.psam"
-        File out_pvar = "~{pfile}_~{pop}.pvar"
-    }
-
-    runtime {
-        docker: "uwgac/admix-kit:0.1.1"
-        memory: "4GB"
-    }
-}
-
-
 task hapgen2 {
     input {
-        File pgen
-        File psam
-        File pvar
+        Map[String, File] pgen
         String build
-        Int chrom
         Int n_indiv
     }
 
-    String pfile = basename(pgen, ".pgen")
+    String pfile = basename(pgen["pgen"], ".pgen")
 
     command <<<
-        ln -s ~{pgen} ~{pfile}.pgen
-        ln -s ~{psam} ~{pfile}.psam
-        ln -s ~{pvar} ~{pfile}.pvar
+        ln -s ~{pgen["pgen"]} ~{pfile}.pgen
+        ln -s ~{pgen["psam"]} ~{pfile}.psam
+        ln -s ~{pgen["pvar"]} ~{pfile}.pvar
         admix hapgen2 \
             --pfile ~{pfile} \
-            --chrom ~{chrom} \
             --n-indiv ~{n_indiv} \
             --out ~{pfile}_hapgen2 \
             --build ~{build}
@@ -193,7 +68,7 @@ task hapgen2 {
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.1"
+        docker: "uwgac/admix-kit:0.1.2"
         memory: "4GB"
     }
 }
@@ -206,7 +81,6 @@ task admix_simu {
         Array[File] pvar
         Array[Float] admix_prop
         String build
-        Int chrom
         Int n_indiv
         Int n_gen
     }
@@ -218,18 +92,20 @@ task admix_simu {
             --n-indiv ~{n_indiv} \
             --n-gen ~{n_gen} \
             --build ~{build} \
-            --out admix_chr~{chrom}
+            --out admix
     >>>
 
     output {
-        File out_pgen = "admix_chr~{chrom}.pgen"
-        File out_psam = "admix_chr~{chrom}.psam"
-        File out_pvar = "admix_chr~{chrom}.pvar"
-        File out_lanc = "admix_chr~{chrom}.lanc"
+        Map[String, File] out_pgen = {
+            "pgen": "admix.pgen", 
+            "psam": "admix.psam", 
+            "pvar": "admix.pvar"
+        }
+        File out_lanc = "admix.lanc"
     }
 
     runtime {
-        docker: "uwgac/admix-kit:0.1.1"
+        docker: "uwgac/admix-kit:0.1.2"
         memory: "16GB"
     }
 }
