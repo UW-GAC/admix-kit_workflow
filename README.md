@@ -1,7 +1,7 @@
 # admix-kit_workflow
 
 Workflow to implement
-[admix-kit](https://kangchenghou.github.io/admix-kit/) on AnVIL
+[admix-kit](https://kangchenghou.github.io/admix-kit/) on AnVIL.
 
 The workflows are written in the Workflow Description Language ([WDL](https://docs.dockstore.org/en/stable/getting-started/getting-started-with-wdl.html)). This GitHub repository contains the Dockerfile, the WDL code, and a JSON file containing inputs to the workflow, both for testing and to serve as an example.
 
@@ -11,7 +11,7 @@ The Dockerfile creates a docker image containing the admix-kit software and all 
 
 ## sim_admixed
 
-This workflow uses HAPGEN2 to simulate ancestral populations from reference data, and then simulates `n_gen` generations of admixture.
+This workflow uses HAPGEN2 to simulate ancestral populations from reference data, and then simulates `n_gen` generations of admixture from the simulated ancestral populations.
 
 The user must specify the following inputs:
 
@@ -19,7 +19,7 @@ input | description
 --- | ---
 pgen | Input genotype files for the simulation. These must be provided in a nested array structure with the innermost layer being a set of pgen/psam/pvar files, the middle layer being an array of populations, and the outermost layer an array of chromosomes. This is best illustrated with [an example](https://github.com/UW-GAC/admix-kit_workflow/blob/main/sim_admixed.json).
 admix_prop | Admixture proportions for each population in `pgen`
-build | "hg19" or "hg38"
+build | Genome build. "hg19" or "hg38"
 n_indiv | Number of individuals to simulate
 n_gen | Number of generations to simulate
 
@@ -40,7 +40,7 @@ The user must specify the following inputs:
 input | description
 --- | ---
 pgen | Input genotype files for the simulation. These must be provided as a set of pgen/psam/pvar files. This is best illustrated with [an example](https://github.com/UW-GAC/admix-kit_workflow/blob/main/run_hapgen.json).
-build | "hg19" or "hg38"
+build | Genome build. "hg19" or "hg38"
 n_indiv | Number of individuals to simulate
 
 The workflow returns the following outputs:
@@ -54,7 +54,7 @@ out_pvar | Output pvar file with simulated genotypes
 
 ## run_admix
 
-This workflow runs admix_simu alone on an array of pgen files for multiple populations. Unlike the inputs for sim_admixed and run_hapgen, the pgen/psam/pvar files must be provided as separate arrays.
+This workflow runs admix_simu alone on an array of pgen files for multiple populations. Unlike the inputs for sim_admixed and run_hapgen, the pgen/psam/pvar files must be provided as separate arrays. Here is [an example](https://github.com/UW-GAC/admix-kit_workflow/blob/main/run_admix.json).
 
 The user must specify the following inputs:
 
@@ -64,7 +64,7 @@ pgen | Array of pgen files, one per population
 psam | Array of psam files, one per population
 pvar | Array of pvar files, one per population
 admix_prop | Admixture proportions for each population in `pgen`
-build | "hg19" or "hg38"
+build | Genome build. "hg19" or "hg38"
 n_indiv | Number of individuals to simulate
 n_gen | Number of generations to simulate
 
