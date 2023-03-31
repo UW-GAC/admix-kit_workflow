@@ -9,7 +9,6 @@ The Dockerfile creates a docker image containing the admix-kit software and all 
 [uwgac/admix-kit](https://hub.docker.com/r/uwgac/admix-kit).
 
 We provide three workflows:
-add overview and links to each workflow
 - [sim_admixed](#sim_admixed): Simulate admixed individuals from a set of reference data. This workflow contain both steps of [run_hapgen](#run_hapgen) and [run_admix](#run_admix) as follows.
 - [run_hapgen](#run_hapgen): Run HAPGEN2 to extend a set of reference population starting from one set of pgen files.
 - [run_admix](#run_admix): Run admix_simu to simulate admixed individuals from a set of reference populations.
