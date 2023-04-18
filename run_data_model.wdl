@@ -36,7 +36,7 @@ task sim_data_model {
     >>>
 
     output {
-        File file_table = write_map(flatten(pgen))
+        File file_table = write_json(pgen)
     }
 
     runtime {
