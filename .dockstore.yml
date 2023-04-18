@@ -30,3 +30,8 @@ workflows:
      primaryDescriptorPath: /run_admix.wdl
      testParameterFiles:
          - /run_admix.json
+   - name: run_data_model
+     subclass: WDL
+     primaryDescriptorPath: /run_data_model.wdl
+     testParameterFiles:
+         - /run_data_model.json
