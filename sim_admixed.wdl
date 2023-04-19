@@ -2,17 +2,19 @@ version 1.0
 
 workflow sim_admixed {
     input {
-        Array[Array[Map[String, File]]] pgen
+        Map[String, Map[String, Map[String, File]]] pgen
         Array[Float] admix_prop
         String build
         Int n_indiv
         Int n_gen
     }
 
-    scatter(chrom in pgen) {
-        scatter (pop in chrom) {
+    scatter(pair1 in pgen) {
+        String chrom = pair1.left
+        File pop_map = pair1.right
+        scatter (pair2 in pop_map) {
             call hapgen2 {
-                input: pgen = pop,
+                input: pgen = pop_map,
                        build = build,
                        n_indiv = n_indiv
             }
@@ -23,6 +25,7 @@ workflow sim_admixed {
                    psam = hapgen2.out_psam,
                    pvar = hapgen2.out_pvar,
                    admix_prop = admix_prop,
+                   chrom = chrom,
                    build = build,
                    n_indiv = n_indiv,
                    n_gen = n_gen
@@ -32,6 +35,7 @@ workflow sim_admixed {
     output {
         Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
+        Array[File] out_chrom = admix_simu.out_chrom
     }
     
     meta {
@@ -80,6 +84,7 @@ task admix_simu {
         Array[File] psam
         Array[File] pvar
         Array[Float] admix_prop
+        String? chrom
         String build
         Int n_indiv
         Int n_gen
@@ -102,6 +107,7 @@ task admix_simu {
             "pvar": "admix.pvar"
         }
         File out_lanc = "admix.lanc"
+        String? out_chrom = chrom
     }
 
     runtime {

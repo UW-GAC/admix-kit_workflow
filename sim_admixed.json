@@ -1,30 +1,30 @@
 {
-    "sim_admixed.pgen": [
-        [
-            {
+    "sim_admixed.pgen": {
+        "21": {
+            "PEL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pvar"
             },
-            {
+            "MXL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pvar"
             }
-        ],
-        [
-            {
+        },
+        "22": {
+            "PEL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pvar"
             },
-            {
+            "MXL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pvar"
             }
-        ]
-    ],
+        }
+    },
     "sim_admixed.admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
     "sim_admixed.n_indiv": 10,
