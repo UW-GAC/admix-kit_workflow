@@ -39,7 +39,7 @@ task sim_data_model {
         Rscript -e "\
         dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
         print(dat); \
-        dat$chromosome <- unlist(strsplit('~{sep=' ' chrom}', split=' ', fixed=TRUE)); \
+        dat <- dplyr::mutate(dat, chromosome=unlist(strsplit(chromtxt, split=' ', fixed=TRUE))); \
         print(dat); \
         dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
         print(dat); \
