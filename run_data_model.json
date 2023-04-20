@@ -14,5 +14,7 @@
     "run_data_model.lanc": [ 
         "gs://fc-de85480c-3b81-412d-838f-808954922b60/submissions/b42e4afd-088c-4982-8025-8d23e47b730e/sim_admixed/24ecb55a-a6eb-4437-9ca3-88a3efe2bcec/call-admix_simu/shard-0/cacheCopy/admix.lanc",
         "gs://fc-de85480c-3b81-412d-838f-808954922b60/submissions/b42e4afd-088c-4982-8025-8d23e47b730e/sim_admixed/24ecb55a-a6eb-4437-9ca3-88a3efe2bcec/call-admix_simu/shard-1/admix.lanc"
-    ]
+    ],
+    "run_data_model.chrom": ["21", "22"],
+    "run_data_model.pop": ["PEL", "MXL"]
 }
