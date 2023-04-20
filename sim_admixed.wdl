@@ -15,6 +15,7 @@ workflow sim_admixed {
         scatter (p in pop) {
             call hapgen2 {
                 input: pgen = pgen[c][p],
+                       chrom = c,
                        build = build,
                        n_indiv = n_indiv
             }
@@ -34,8 +35,6 @@ workflow sim_admixed {
     output {
         Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
-        Array[File] out_chrom = chrom
-        String out_pop = "~{sep='_' pop}"
     }
     
     meta {
@@ -48,6 +47,7 @@ workflow sim_admixed {
 task hapgen2 {
     input {
         Map[String, File] pgen
+        String chrom
         String build
         Int n_indiv
     }
@@ -62,7 +62,8 @@ task hapgen2 {
             --pfile ~{pfile} \
             --n-indiv ~{n_indiv} \
             --out ~{pfile}_hapgen2 \
-            --build ~{build}
+            --build ~{build} \
+            --chrom ~{chrom}
     >>>
 
     output {
