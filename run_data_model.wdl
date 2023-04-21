@@ -38,17 +38,12 @@ task sim_data_model {
     command <<<
         Rscript -e "\
         dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
-        #print(dat); \
         dat <- dplyr::mutate(dat, chromosome=unlist(strsplit('~{sep=' ' chrom}', split=' ', fixed=TRUE))); \
-        #print(dat); \
         dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
-        #print(dat); \
         dat <- dplyr::mutate(dat, file_type=paste('PLINK2', file_type)); \
-        #print(dat); \
         writeLines(dat[['file_path']], 'files.txt'); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
-        #"
-        cat files.txt
+        "
         while read f; do
             echo $f
             gsutil ls -L $f | grep "md5" | awk '{print $3}' > md5_b64.txt
@@ -60,9 +55,8 @@ task sim_data_model {
         dat <- readr::read_tsv('simulation_file_table.tsv'); \
         md5_hex <- readLines('md5_hex.txt'); \
         dat <- dplyr::mutate(dat, md5sum=md5_hex); \
-        print(dat); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
-        #"
+        "
     >>>
 
     output {
