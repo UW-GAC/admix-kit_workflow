@@ -45,7 +45,7 @@ task sim_data_model {
         #print(dat); \
         dat <- dplyr::mutate(dat, file_type=paste('PLINK2', file_type)); \
         #print(dat); \
-        writeLines(dat[['file_path']], 'files.txt');\
+        writeLines(dat[['file_path']], 'files.txt'); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
         #"
         cat files.txt
@@ -57,7 +57,7 @@ task sim_data_model {
             echo "hex checksum: "; cat md5_hex.txt
         done < files.txt
         Rscript -e "\
-        dat <- readr::read_tsv(simulation_file_table.tsv'); \
+        dat <- readr::read_tsv('simulation_file_table.tsv'); \
         md5_hex <- readLines('md5_hex.txt'); \
         dat <- dplyr::mutate(dat, md5sum=md5_hex); \
         print(dat); \
