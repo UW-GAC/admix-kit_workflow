@@ -45,9 +45,19 @@ task sim_data_model {
         print(dat); \
         dat <- dplyr::mutate(dat, file_type=paste('PLINK2', file_type)); \
         print(dat); \
-        md5_b64 <- sapply(dat$file_path, function(x) system(paste('gsutil ls -L', x, '| grep \"md5\" | awk \'{print $3}\''), intern=TRUE), USE.NAMES=FALSE); \
-        md5_hex <- sapply(md5_b64, function(x) system(paste('python3 -c \"import base64; import binascii; print(binascii.hexlify(base64.urlsafe_b64decode(\'', x, '\')))\" | cut -d \"\'\" -f 2'), intern=TRUE), USE.NAMES=FALSE); \
-        dat$md5sum <- md5_hex; \
+        writeLines(dat[['file_path']], 'files.txt');\
+        readr::write_tsv(dat, 'simulation_file_table.tsv'); \
+        #"
+        while read f; do
+            gsutil ls -L '$f' | grep "md5" | awk '{print $3}' > md5_b64.txt
+            echo "b64 checksum: "; cat md5_b64.txt
+            python3 -c "import base64; import binascii; print(binascii.hexlify(base64.urlsafe_b64decode(open('md5_b64.txt').read())))" | cut -d "'" -f 2 >> md5_hex.txt
+            echo "hex checksum: "; cat md5_hex.txt
+        done < files.txt
+        Rscript -e "\
+        dat <- readr::read_tsv(simulation_file_table.tsv'); \
+        md5_hex <- readLines('md5_hex.txt'); \
+        dat <- dplyr::mutate(dat, md5sum=md5_hex); \
         print(dat); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
         #"
