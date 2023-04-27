@@ -3,7 +3,7 @@ version 1.0
 
 workflow run_data_model {
     input {
-        Array[Map[String, String]] pgen
+        Array[Map[String, File]] pgen
         Array[String] lanc
         Array[String] chrom
         Array[String] pop
@@ -16,6 +16,7 @@ workflow run_data_model {
 
     call sim_data_model {
         input: pgen = pgen,
+               psam = pgen[1]["psam"],
                lanc = lanc,
                chrom = chrom,
                pop = pop,
@@ -40,6 +41,7 @@ workflow run_data_model {
 task sim_data_model {
     input {
         Array[Map[String, String]] pgen
+        File psam
         Array[String] lanc
         Array[String] chrom
         Array[String] pop
@@ -55,16 +57,23 @@ task sim_data_model {
         parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
         pop <- parse_array('~{sep=' ' pop}'); \
         prop <- parse_array('~{sep=' ' admix_prop}'); \
-        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N ~{n_indiv}', '_GEN ~{n_gen}'); \
+        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N~{n_indiv}', '_GEN~{n_gen}'); \
         dat <- dplyr::tibble(field='sample_set_id', value=set); \
         param <- paste0(paste(paste0(pop, prop), collapse='_'), ', ~{n_indiv} individuals, ~{n_gen} generations'); \
         dat <- dplyr::bind_rows(dat, dplyr::tibble(field='simulation_parameters', value=param)); \
         ref <- c('hg19'='GRCh37', 'hg38'='GRCh38')['~{build}']; \
         dat <- dplyr::bind_rows(dat, dplyr::tibble(field='reference_assembly', value=ref)); \
+        dat <- dplyr::bind_rows(dat, dplyr::tibble(field='source_data', value='~{source_data}')); \
+        dat <- dplyr::bind_rows(dat, dplyr::tibble(field='simulation_software', value='admix-kit')); \
         readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
+        psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1)
+        subj <- dplyr::mutate(psam, consent_code='NRES', study_nickname=set); \
+        readr::write_tsv(subj, 'subject_table.tsv'); \
+        samp <- dplyr::mutate(psam[,1], sample_id=subject_id, tissue_source=NA); \
+        readr::write_tsv(samp, 'sample_table.tsv'); \
+        sample_set <- dplyr::mutate(dplyr::select(samp, sample_id), sample_set_id=set); \
+        readr::write_tsv(sample_set, 'sample_set_table.tsv'); \
         "
-        echo "source_data\t~{source_data}" >> simulation_dataset_table.tsv
-        echo "simulation_software\tadmix-kit" >> simulation_dataset_table.tsv
         Rscript -e "\
         parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
         chromosome <- parse_array('~{sep=' ' chrom}');
@@ -94,6 +103,9 @@ task sim_data_model {
 
     output {
         Map[String, File] table_files = {
+            "subject": "subject_table.tsv",
+            "sample": "sample_table.tsv",
+            "sample_set": "sample_set_table.tsv",
             "simulation_dataset": "simulation_dataset_table.tsv",
             "simulation_file": "simulation_file_table.tsv"
         }
