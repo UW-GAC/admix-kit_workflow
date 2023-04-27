@@ -7,17 +7,27 @@ workflow run_data_model {
         Array[String]? lanc
         Array[String] chrom
         Array[String] pop
+        Array[Float] admix_prop
+        String build
+        Int n_indiv
+        Int n_gen
+        String source_data = "1000 Genomes"
     }
 
     call sim_data_model {
         input: pgen = pgen,
                lanc = lanc,
                chrom = chrom,
-               pop = pop
+               pop = pop,
+               admix_prop = admix_prop,
+               build = build,
+               n_indiv = n_indiv,
+               n_gen = n_gen,
+               source_data = source_data
     }
     
     output {
-        File file_table = sim_data_model.file_table
+        Map[String, File] table_files = sim_data_model.table_files
     }
 
     meta {
@@ -33,9 +43,27 @@ task sim_data_model {
         Array[String]? lanc
         Array[String] chrom
         Array[String] pop
+        Array[Float] admix_prop
+        String build
+        Int n_indiv
+        Int n_gen
+        String source_data
     }
 
     command <<<
+        Rscript -e "\
+        pop <- unlist(strsplit('~{sep=' ' pop}', split=' ', fixed=TRUE)); \
+        prop <- unlist(strsplit('~{sep=' ' admix_prop}', split=' ', fixed=TRUE)); \
+        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N ~{n_indiv}', '_GEN ~{n_gen}'); \
+        dat <- dplyr::tibble(field='sample_set_id', value=set); \
+        param <- paste0(paste(paste0(pop, prop), collapse='_'), ', ~{n_indiv} individuals, ~{n_gen} generations'); \
+        dat <- dplyr::bind_rows(dat, dplyr::tibble(field='simulation_parameters', value=param)); \
+        ref <- c('hg19'='GRCh37', 'hg38'='GRCh38')['~{build}']; \
+        dat <- dplyr::bind_rows(dat, dplyr::tibble(field='reference_assembly', value=ref)); \
+        readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
+        "
+        echo "source_data\t~{source_data}" >> simulation_dataset_table.tsv
+        echo "simulation_software\tadmix-kit" >> simulation_dataset_table.tsv
         Rscript -e "\
         dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
         dat <- dplyr::mutate(dat, chromosome=unlist(strsplit('~{sep=' ' chrom}', split=' ', fixed=TRUE))); \
@@ -60,8 +88,10 @@ task sim_data_model {
     >>>
 
     output {
-        File file_table = "simulation_file_table.tsv"
-        File files = "files.txt"
+        Map[String, File] table_files = {
+            "simulation_dataset": "simulation_dataset_table.tsv",
+            "simulation_file": "simulation_file_table.tsv"
+        }
     }
 
     runtime {
