@@ -4,7 +4,7 @@ version 1.0
 workflow run_data_model {
     input {
         Array[Map[String, String]] pgen
-        Array[String]? lanc
+        Array[String] lanc
         Array[String] chrom
         Array[String] pop
         Array[Float] admix_prop
@@ -40,7 +40,7 @@ workflow run_data_model {
 task sim_data_model {
     input {
         Array[Map[String, String]] pgen
-        Array[String]? lanc
+        Array[String] lanc
         Array[String] chrom
         Array[String] pop
         Array[Float] admix_prop
@@ -52,8 +52,9 @@ task sim_data_model {
 
     command <<<
         Rscript -e "\
-        pop <- unlist(strsplit('~{sep=' ' pop}', split=' ', fixed=TRUE)); \
-        prop <- unlist(strsplit('~{sep=' ' admix_prop}', split=' ', fixed=TRUE)); \
+        parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
+        pop <- parse_array('~{sep=' ' pop}'); \
+        prop <- parse_array('~{sep=' ' admix_prop}'); \
         set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N ~{n_indiv}', '_GEN ~{n_gen}'); \
         dat <- dplyr::tibble(field='sample_set_id', value=set); \
         param <- paste0(paste(paste0(pop, prop), collapse='_'), ', ~{n_indiv} individuals, ~{n_gen} generations'); \
@@ -65,10 +66,14 @@ task sim_data_model {
         echo "source_data\t~{source_data}" >> simulation_dataset_table.tsv
         echo "simulation_software\tadmix-kit" >> simulation_dataset_table.tsv
         Rscript -e "\
+        parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
+        chromosome <- parse_array('~{sep=' ' chrom}');
         dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
-        dat <- dplyr::mutate(dat, chromosome=unlist(strsplit('~{sep=' ' chrom}', split=' ', fixed=TRUE))); \
+        dat <- dplyr::mutate(dat, chromosome=chromosome); \
         dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
         dat <- dplyr::mutate(dat, file_type=paste('PLINK2', file_type)); \
+        dat_lanc <- dplyr::tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
+        dat <- dplyr::bind_rows(dat, dat_lanc); \
         writeLines(dat[['file_path']], 'files.txt'); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
         "
