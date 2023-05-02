@@ -79,15 +79,15 @@ task sim_data_model {
         library(dplyr); \
         parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
         chromosome <- parse_array('~{sep=' ' chrom}'); \
-        dat <- jsonlite::fromJSON('~{write_json(pgen)}') %>% \
-            mutate(chromosome=chromosome) %>% \
-            tidyr::pivot_longer(-chromosome, names_to='file_type', values_to='file_path') \
-        psam <- filter(dat, file_type == 'psam') %>% \
-            select(file_type, file_path) %>% \
-            distinct(file_type, .keep_all=TRUE) \
-        dat <- filter(dat, file_type != 'psam') %>% \
-            bind_rows(psam) %>% \
-            mutate(file_type=paste('PLINK2', file_type)) \
+        dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
+        dat <- mutate(dat, chromosome=chromosome); \
+        dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
+        psam <- filter(dat, file_type == 'psam'); \
+        psam <- select(psam, file_type, file_path); \
+        psam <- distinct(psam, file_type, .keep_all=TRUE); \
+        dat <- filter(dat, file_type != 'psam'); \
+        dat <- bind_rows(dat, psam); \
+        dat <- mutate(file_type=paste('PLINK2', file_type)); \
         dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
         dat <- bind_rows(dat, dat_lanc); \
         writeLines(dat[['file_path']], 'files.txt'); \
