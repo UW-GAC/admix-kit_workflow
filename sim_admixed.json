@@ -30,5 +30,10 @@
     "sim_admixed.admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
     "sim_admixed.n_indiv": 10,
-    "sim_admixed.n_gen": 2
+    "sim_admixed.n_gen": 2,
+    "sim_admixed.source_data": "1000 Genomes",
+    "sim_admixed.model_url": "https://raw.githubusercontent.com/UW-GAC/primed_data_models/main/PRIMED_genotype_data_model.json",
+    "sim_admixed.workspace_name": "PRIMED_admix-kit_workflow_devel",
+    "sim_admixed.workspace_namespace": "primed-dev",
+    "sim_admixed.import_tables": true
 }
