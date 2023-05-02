@@ -1,5 +1,8 @@
 version 1.0
 
+import "run_data_model.wdl" as tasks
+import "https://raw.githubusercontent.com/UW-GAC/primed-file-checks/main/validate_genotype_model.wdl" as validate
+
 workflow sim_admixed {
     input {
         Map[String, Map[String, Map[String, File]]] pgen
@@ -9,6 +12,12 @@ workflow sim_admixed {
         String build
         Int n_indiv
         Int n_gen
+        String source_data
+        String model_url
+        String workspace_name
+        String workspace_namespace
+        Boolean overwrite = false
+        Boolean import_tables = false
     }
 
     scatter(c in chrom) {
@@ -32,9 +41,34 @@ workflow sim_admixed {
         }
     }
 
+    call tasks.sim_data_model {
+        input: pgen = admix_simu.out_pgen,
+               psam = admix_simu.out_pgen[1]["psam"],
+               lanc = admix_simu.out_lanc,
+               chrom = chrom,
+               pop = pop,
+               admix_prop = admix_prop,
+               build = build,
+               n_indiv = n_indiv,
+               n_gen = n_gen,
+               source_data = source_data
+    }
+
+    call validate.results {
+        input: table_files = sim_data_model.table_files,
+               model_url = model_url,
+               workspace_name = workspace_name,
+               workspace_namespace = workspace_namespace,
+               overwrite = overwrite,
+               import_tables = import_tables
+    }
+
     output {
         Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
+        Map[String, File] table_files = sim_data_model.table_files
+        File validation_report = results.validation_report
+        Array[File]? tables = results.tables
     }
     
     meta {
