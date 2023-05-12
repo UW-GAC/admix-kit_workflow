@@ -11,12 +11,13 @@ workflow sim_admixed {
         String build
         Int n_indiv
         Int n_gen
+        Int run_id = 1
         String source_data
         String model_url
         String workspace_name
         String workspace_namespace
-        Boolean overwrite = false
-        Boolean import_tables = false
+        Boolean import_tables = true
+        Boolean overwrite = true
     }
 
     scatter(c in chrom) {
@@ -160,6 +161,7 @@ task sim_data_model {
         String build
         Int n_indiv
         Int n_gen
+        Int run_id
         String source_data
     }
 
@@ -169,7 +171,7 @@ task sim_data_model {
         parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
         pop <- parse_array('~{sep=' ' pop}'); \
         prop <- parse_array('~{sep=' ' admix_prop}'); \
-        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N~{n_indiv}', '_GEN~{n_gen}'); \
+        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N~{n_indiv}', '_GEN~{n_gen}', '_RUN~{run_id}'); \
         dat <- tibble(field='sample_set_id', value=set); \
         param <- paste0(paste(paste0(pop, prop), collapse='_'), ', ~{n_indiv} individuals, ~{n_gen} generations'); \
         dat <- bind_rows(dat, tibble(field='simulation_parameters', value=param)); \
@@ -178,10 +180,11 @@ task sim_data_model {
         dat <- bind_rows(dat, tibble(field='source_data', value='~{source_data}')); \
         dat <- bind_rows(dat, tibble(field='simulation_software', value='admix-kit')); \
         readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
-        psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1)
+        psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1); \
+        subj <- mutate(subj, subject_id=paste(set, subject_id, sep='_')); \
         subj <- mutate(psam, consent_code='NRES', study_nickname=set); \
         readr::write_tsv(subj, 'subject_table.tsv'); \
-        samp <- mutate(psam[,1], sample_id=subject_id, tissue_source=NA); \
+        samp <- mutate(subj[,1], sample_id=subject_id, tissue_source=NA); \
         readr::write_tsv(samp, 'sample_table.tsv'); \
         sample_set <- mutate(select(samp, sample_id), sample_set_id=set); \
         readr::write_tsv(sample_set, 'sample_set_table.tsv'); \
