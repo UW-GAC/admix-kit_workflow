@@ -51,6 +51,7 @@ workflow sim_admixed {
                build = build,
                n_indiv = n_indiv,
                n_gen = n_gen,
+               run_id = run_id,
                source_data = source_data
     }
 
@@ -161,7 +162,7 @@ task sim_data_model {
         String build
         Int n_indiv
         Int n_gen
-        Int run_id
+        Int run_id = 1
         String source_data
     }
 

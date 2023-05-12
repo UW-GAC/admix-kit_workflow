@@ -12,6 +12,7 @@ workflow run_data_model {
         String build
         Int n_indiv
         Int n_gen
+        Int run_id = 1
         String source_data = "1000 Genomes"
     }
 
@@ -25,6 +26,7 @@ workflow run_data_model {
                build = build,
                n_indiv = n_indiv,
                n_gen = n_gen,
+               run_id = run_id,
                source_data = source_data
     }
     
