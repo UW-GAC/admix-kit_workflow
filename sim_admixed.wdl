@@ -182,8 +182,8 @@ task sim_data_model {
         dat <- bind_rows(dat, tibble(field='simulation_software', value='admix-kit')); \
         readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
         psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1); \
-        subj <- mutate(subj, subject_id=paste(set, subject_id, sep='_')); \
-        subj <- mutate(psam, consent_code='NRES', study_nickname=set); \
+        subj <- mutate(psam, subject_id=paste(set, subject_id, sep='_')); \
+        subj <- mutate(subj, consent_code='NRES', study_nickname=set); \
         readr::write_tsv(subj, 'subject_table.tsv'); \
         samp <- mutate(subj[,1], sample_id=subject_id, tissue_source=NA); \
         readr::write_tsv(samp, 'sample_table.tsv'); \
