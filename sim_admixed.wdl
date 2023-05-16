@@ -67,7 +67,6 @@ workflow sim_admixed {
     output {
         Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
-        Map[String, File] table_files = sim_data_model.table_files
         File validation_report = results.validation_report
         Array[File]? tables = results.tables
     }
