@@ -172,7 +172,8 @@ task sim_data_model {
         parse_array <- function(x) unlist(strsplit(x, split=' ', fixed=TRUE)); \
         pop <- parse_array('~{sep=' ' pop}'); \
         prop <- parse_array('~{sep=' ' admix_prop}'); \
-        set <- paste0(paste(paste0(pop, prop), collapse='_'), '_N~{n_indiv}', '_GEN~{n_gen}', '_RUN~{run_id}'); \
+        study <- paste0(paste(paste0(pop, prop), collapse='_'), '_N~{n_indiv}', '_GEN~{n_gen}'); \
+        set <- paste0(study, '_RUN~{run_id}'); \
         dat <- tibble(field='sample_set_id', value=set); \
         param <- paste0(paste(paste0(pop, prop), collapse='_'), ', ~{n_indiv} individuals, ~{n_gen} generations'); \
         dat <- bind_rows(dat, tibble(field='simulation_parameters', value=param)); \
@@ -183,7 +184,7 @@ task sim_data_model {
         readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
         psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1); \
         subj <- mutate(psam, subject_id=paste(set, subject_id, sep='_')); \
-        subj <- mutate(subj, consent_code='NRES', study_nickname=set); \
+        subj <- mutate(subj, consent_code='NRES', study_nickname=study); \
         readr::write_tsv(subj, 'subject_table.tsv'); \
         samp <- mutate(subj[,1], sample_id=subject_id, tissue_source=NA); \
         readr::write_tsv(samp, 'sample_table.tsv'); \
