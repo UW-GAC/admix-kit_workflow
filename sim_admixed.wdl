@@ -197,11 +197,6 @@ task sim_data_model {
         dat <- jsonlite::fromJSON('~{write_json(pgen)}'); \
         dat <- mutate(dat, chromosome=chromosome); \
         dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
-        psam <- filter(dat, file_type == 'psam'); \
-        psam <- select(psam, file_type, file_path); \
-        psam <- distinct(psam, file_type, .keep_all=TRUE); \
-        dat <- filter(dat, file_type != 'psam'); \
-        dat <- bind_rows(dat, psam); \
         dat <- mutate(dat, file_type=paste('PLINK2', file_type)); \
         dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
         dat <- bind_rows(dat, dat_lanc); \
