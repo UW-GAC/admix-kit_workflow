@@ -1,32 +1,39 @@
 {
-    "sim_admixed.pgen": [
-        [
-            {
+    "sim_admixed.pgen": {
+        "21": {
+            "PEL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.21.pvar"
             },
-            {
+            "MXL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.21.pvar"
             }
-        ],
-        [
-            {
+        },
+        "22": {
+            "PEL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/PEL.22.pvar"
             },
-            {
+            "MXL": {
                 "pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pgen",
                 "psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.psam",
                 "pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED/hg38/hm3/MXL.22.pvar"
             }
-        ]
-    ],
+        }
+    },
+    "sim_admixed.chrom": ["21", "22"],
+    "sim_admixed.pop": ["PEL", "MXL"],
     "sim_admixed.admix_prop": [0.4, 0.6],
     "sim_admixed.build": "hg38",
     "sim_admixed.n_indiv": 10,
-    "sim_admixed.n_gen": 2
+    "sim_admixed.n_gen": 2,
+    "sim_admixed.source_data": "1000 Genomes",
+    "sim_admixed.model_url": "https://raw.githubusercontent.com/UW-GAC/primed_data_models/main/PRIMED_genotype_data_model.json",
+    "sim_admixed.workspace_name": "PRIMED_admix-kit_workflow_devel",
+    "sim_admixed.workspace_namespace": "primed-dev",
+    "sim_admixed.import_tables": true
 }
