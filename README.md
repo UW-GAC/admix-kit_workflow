@@ -9,13 +9,15 @@ The Dockerfile creates a docker image containing the admix-kit software and all 
 [uwgac/admix-kit](https://hub.docker.com/r/uwgac/admix-kit).
 
 We provide three workflows:
-- [sim_admixed](#sim_admixed): Simulate admixed individuals from a set of reference data. This workflow contain both steps of [run_hapgen](#run_hapgen) and [run_admix](#run_admix) as follows.
+- [sim_admixed](#sim_admixed): Simulate admixed individuals from a set of reference data. This workflow contains both steps of [run_hapgen](#run_hapgen) and [run_admix](#run_admix).
 - [run_hapgen](#run_hapgen): Run HAPGEN2 to extend a set of reference population starting from one set of pgen files.
 - [run_admix](#run_admix): Run admix_simu to simulate admixed individuals from a set of reference populations.
 
 ## sim_admixed
 
 This workflow uses HAPGEN2 to simulate ancestral populations from reference data, and then simulates `n_gen` generations of admixture from the simulated ancestral populations.
+
+The final step in the workflow is to generate data tables in the PRIMED data model as .tsv files. If import_tables is true, these tsv files will be imported to data tables in the workspace.
 
 The user must specify the following inputs:
 
@@ -26,6 +28,10 @@ admix_prop | Admixture proportions for each population in `pgen`
 build | Genome build. "hg19" or "hg38"
 n_indiv | Number of individuals to simulate
 n_gen | Number of generations to simulate
+import_tables | A boolean indicating whether data model tables should be imported to the workspace.
+overwrite | A boolean indicating whether existing rows in the workspace data tables should be overwritten.
+workspace_name | A string with the workspace name. e.g, if the workspace URL is https://anvil.terra.bio/#workspaces/fc-product-demo/Terra-Workflows-Quickstart, the workspace name is "Terra-Workflows-Quickstart"
+workspace_namespace | A string with the workspace name. e.g, if the workspace URL is https://anvil.terra.bio/#workspaces/fc-product-demo/Terra-Workflows-Quickstart, the workspace namespace is "fc-product-demo"
 
 The workflow returns the following outputs:
 
