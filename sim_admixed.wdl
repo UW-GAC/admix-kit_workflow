@@ -183,9 +183,10 @@ task sim_data_model {
         readr::write_tsv(dat, 'simulation_dataset_table.tsv'); \
         psam <- readr::read_tsv('~{psam}', col_names=c('subject_id', 'reported_sex'), skip=1); \
         subj <- mutate(psam, subject_id=paste(set, subject_id, sep='_')); \
+        subj <- mutate(subj, reported_sex=ifelse(is.na(reported_sex), 'Unknown', reported_sex)); \
         subj <- mutate(subj, consent_code='NRES', study_nickname=study); \
         readr::write_tsv(subj, 'subject_table.tsv'); \
-        samp <- mutate(subj[,1], sample_id=subject_id, tissue_source=NA); \
+        samp <- mutate(subj[,1], sample_id=subject_id, tissue_source='Unknown'); \
         readr::write_tsv(samp, 'sample_table.tsv'); \
         sample_set <- mutate(select(samp, sample_id), sample_set_id=set); \
         readr::write_tsv(sample_set, 'sample_set_table.tsv'); \
