@@ -55,7 +55,7 @@ workflow sim_admixed {
                source_data = source_data
     }
 
-    call validate.results {
+    call validate.validate {
         input: table_files = sim_data_model.table_files,
                model_url = model_url,
                workspace_name = workspace_name,
@@ -67,8 +67,8 @@ workflow sim_admixed {
     output {
         Array[Map[String, File]] out_pgen = admix_simu.out_pgen
         Array[File] out_lanc = admix_simu.out_lanc
-        File validation_report = results.validation_report
-        Array[File]? tables = results.tables
+        File validation_report = validate.validation_report
+        Array[File]? tables = validate.tables
     }
     
     meta {
