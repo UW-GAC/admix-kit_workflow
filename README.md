@@ -85,3 +85,5 @@ output | description
 out_pgen | Output pgen files with admixed genotypes. This is an array of pgen/psam/pvar file sets for each chromosome.
 out_lanc | Output local ancestry file for simulated individuals.
 
+# Analysis notebook
+We used this workflow to simulate African-European admixed individuals, using a demographic model similar to African American individuals with over 8 generations of admixture and an average proportion of 80% African and 20% European (ancestry proportion varies by individual). See an example analysis notebook of simulated data [here](https://nbviewer.org/github/UW-GAC/admix-kit_workflow/tree/main/notebooks/analysis.ipynb).
