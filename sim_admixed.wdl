@@ -201,7 +201,7 @@ task sim_data_model {
         dat <- mutate(dat, chromosome=chromosome); \
         dat <- tidyr::pivot_longer(dat, -chromosome, names_to='file_type', values_to='file_path'); \
         dat <- mutate(dat, file_type=paste('PLINK2', file_type)); \
-        dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
+        dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='LANC', chromosome=chromosome); \
         dat <- bind_rows(dat, dat_lanc); \
         files <- dat[['file_path']]; \
         chroms <- dat[['chromosome']]; \
