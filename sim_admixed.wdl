@@ -204,7 +204,8 @@ task sim_data_model {
         dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
         dat <- bind_rows(dat, dat_lanc); \
         files <- dat[['file_path']]; \
-        new_files <- file.path('~{dest_bucket}', basename(files)); \
+        dest_bucket <- sub('\\\\/$', '', '~{dest_bucket}')
+        new_files <- file.path(dest_bucket, basename(files)); \
         for (i in seq_along(files)) gsutil_cp(files[i], new_files[i]); \
         dat[['file_path']] <- new_files; \
         writeLines(dat[['file_path']], 'files.txt'); \
