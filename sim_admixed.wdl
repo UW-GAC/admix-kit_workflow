@@ -4,6 +4,7 @@ import "https://raw.githubusercontent.com/UW-GAC/primed-file-checks/main/validat
 
 workflow sim_admixed {
     input {
+        String dest_bucket
         Map[String, Map[String, Map[String, File]]] pgen
         Array[String] chrom
         Array[String] pop
@@ -42,7 +43,8 @@ workflow sim_admixed {
     }
 
     call sim_data_model {
-        input: pgen = admix_simu.out_pgen,
+        input: dest_bucket = dest_bucket,
+               pgen = admix_simu.out_pgen,
                psam = admix_simu.out_pgen[1]["psam"],
                lanc = admix_simu.out_lanc,
                chrom = chrom,
@@ -65,8 +67,7 @@ workflow sim_admixed {
     }
 
     output {
-        Array[Map[String, File]] out_pgen = admix_simu.out_pgen
-        Array[File] out_lanc = admix_simu.out_lanc
+        Array[String] files = sim_data_model.data_files
         File validation_report = validate.validation_report
         Array[File]? tables = validate.tables
     }
@@ -152,6 +153,7 @@ task admix_simu {
 
 task sim_data_model {
     input {
+        String dest_bucket
         Array[Map[String, String]] pgen
         File psam
         Array[String] lanc
@@ -201,6 +203,10 @@ task sim_data_model {
         dat <- mutate(dat, file_type=paste('PLINK2', file_type)); \
         dat_lanc <- tibble(file_path=parse_array('~{sep=' ' lanc}'), file_type='local ancestry', chromosome=chromosome); \
         dat <- bind_rows(dat, dat_lanc); \
+        files <- dat[['file_path']]; \
+        new_files <- file.path('~{dest_bucket}', basename(files)); \
+        for (i in seq_along(files)) gsutil_cp(files[i], new_files[i]); \
+        dat[['file_path']] <- new_files; \
         writeLines(dat[['file_path']], 'files.txt'); \
         readr::write_tsv(dat, 'simulation_file_table.tsv'); \
         "
@@ -227,6 +233,7 @@ task sim_data_model {
             "simulation_dataset": "simulation_dataset_table.tsv",
             "simulation_file": "simulation_file_table.tsv"
         }
+        Array[File] data_files = read_lines("files.txt")
     }
 
     runtime {
