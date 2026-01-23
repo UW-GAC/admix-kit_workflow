@@ -206,7 +206,7 @@ task sim_data_model {
         files <- dat[['file_path']]; \
         chroms <- dat[['chromosome']]; \
         dest_bucket <- sub('\\\\/$', '', '~{dest_bucket}'); \
-        new_files <- file.path(dest_bucket, paste0("chr", chroms, "_", basename(files))); \
+        new_files <- file.path(dest_bucket, paste0('chr', chroms, '_', basename(files))); \
         for (i in seq_along(files)) AnVIL::gsutil_cp(files[i], new_files[i]); \
         dat[['file_path']] <- new_files; \
         writeLines(dat[['file_path']], 'files.txt'); \
