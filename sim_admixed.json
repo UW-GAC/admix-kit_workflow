@@ -1,4 +1,5 @@
 {
+    "sim_admixed.dest_bucket": "gs://fc-de85480c-3b81-412d-838f-808954922b60", 
     "sim_admixed.pgen": {
         "21": {
             "PEL": {
